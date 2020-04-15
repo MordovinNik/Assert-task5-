@@ -90,6 +90,7 @@ void FatalErrorFunc(unsigned int line, char* fileName, char* message, int return
     TranslateMessage(&msg);
     DispatchMessage(&msg);
   }
+  CloseSystem();
   exit(returnValue);
 }
 

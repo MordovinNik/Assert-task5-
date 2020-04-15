@@ -16,3 +16,4 @@ int InitSystem(int count);
 
 void FatalErrorFunc(unsigned int line, char* fileName, char* message, int returnValue);
 
+void CloseSystem();

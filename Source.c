@@ -14,6 +14,8 @@ int main()
   FatalError(1, "Fatal Error2", 10);
   FatalError(0, "Fatal Error1", 10);
 
+  CloseSystem();
+
   system("pause");
 }
 
