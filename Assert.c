@@ -2,23 +2,19 @@
 
 BOOLEAN ignoreAll = FALSE;
 int assertsIgnored;
-char** names;
-int* lines;
+struct ASSERTINFO
+{
+  char* name;
+  int line;
+}*ignoreAssertInfo;
+
 
 int InitSystem(int count)
 {
-  lines = calloc(count, sizeof(char));
+  ignoreAssertInfo = calloc(count, sizeof(ignoreAssertInfo));
 
-  if (!lines)
+  if (!ignoreAssertInfo)
     return 1;
-
-  names = calloc(sizeof(int)*count, sizeof(int));
-
-  if (!lines)
-  {
-    free(lines);
-    return 1;
-  }
 
   assertsIgnored = 0;
   return 0;
@@ -26,8 +22,7 @@ int InitSystem(int count)
 
 void CloseSystem()
 {
-  free(lines);
-  free(names);
+  free(ignoreAssertInfo);
 }
 
 void MyAssertFunc(unsigned int line, char* fileName, char* message)
@@ -37,7 +32,7 @@ void MyAssertFunc(unsigned int line, char* fileName, char* message)
 
   for (int i = 0; i < assertsIgnored; i++)
   {
-    if (!strcmp(fileName, names[i]) && lines[i] == line)
+    if (!strcmp(fileName, ignoreAssertInfo[i].name) && ignoreAssertInfo[i].line == line)
       return;
   }
 
@@ -54,8 +49,8 @@ void MyAssertFunc(unsigned int line, char* fileName, char* message)
       return;
 
     case IGNORE_ASSERT:
-      names[assertsIgnored] = fileName;
-      lines[assertsIgnored] = line;
+      ignoreAssertInfo[assertsIgnored].name = fileName;
+      ignoreAssertInfo[assertsIgnored].line = line;
       assertsIgnored++;
       return;
 
